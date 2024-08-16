@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/heroicons@1.0.6/umd/heroicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    <title>Property Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#D6D0D0',
+                        navbar: '091638'
+                    },
+                    fontFamily: {
+                        open: ["Open Sans", "sans-serif"],
+                        merri: ["Merriweather", "sans-serif"]
+                    },
+                    colors: {
+                        primary: "#1C3988",
+                        lightbleu: "#F3F3FA",
+                        darkbleu: "#091638",
+                    },
+                }
+            }
+        },
+
+    </script>
+</head>
+
+<body class="bg-gray-100 font-mulish">
+    <nav>
+        <section>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative py-4 flex justify-between items-center mt-12">
+                <a class="text-3xl font-bold leading-none cursor-pointer" href="{{ url_for('views.home') }}">
+                    <img src="{{ url_for('static', filename='images/BlueLogo.png') }}" alt="Logo">
+                </a>
+                <div class="lg:hidden">
+                    <button class="navbar-burger flex items-center text-blue-600 p-3">
+                        <svg class="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <title>Mobile menu</title>
+                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <ul
+                    class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6">
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500" href="{{ url_for('views.search') }}">Search
+                            in offers</a></li>
+                    <li class="text-gray-300"></li>
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500" href="{{ url_for('views.who') }}">Who We
+                            Are</a></li>
+                    <li class="text-gray-300"></li>
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500 cursor-pointer px-5 py-2" href="#"
+                            onclick="toggleSlideover()">Contacts</a></li>
+                </ul>
+
+                {% if current_user.is_authenticated %}
+                <div class="hidden lg:block relative">
+                    <button
+                        class="text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        onclick="toggleDropdown()">
+                        Account
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <div id="dropdownMenu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20">
+                        <a href="/profile/{{ current_user.id }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="{{ url_for('auth.log_out') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="hidden lg:block">
+                    <a class="hidden lg:inline-block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1.5 px-4 rounded-xl"
+                        href="{{ url_for('auth.sign_up') }}">Sign Up</a>
+                    <a class="hidden lg:inline-block py-2 px-4 bg-blue-800 hover:bg-blue-400 text-white font-bold rounded-xl"
+                        href="{{ url_for('auth.login') }}">Login</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="navbar-menu hidden z-50">
+                <div class="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25 hidden"></div>
+                <nav
+                    class="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
+                    <div class="flex items-center mb-8 justify-between">
+                        <a class="text-3xl font-bold leading-none cursor-pointer" href="{{ url_for('views.home') }}">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                        </a>
+                        <button class="navbar-close">
+                            <svg class="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div>
+                        <ul>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
+                                    href="{{ url_for('views.search') }}">Search in offers</a>
+                            </li>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
+                                    href="{{ url_for('views.who') }}">Who We Are</a>
+                            </li>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded cursor-pointer px-5 py-2"
+                                    href="#" onclick="toggleSlideover()">Contacts</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {% if current_user.is_authenticated %}
+                    <div class="mt-auto">
+                        <div class="pt-6">
+                            <a class="block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 mb-2 text-xs text-center border border-blue-500 hover:border-transparent rounded-xl"
+                                href="{{ url_for('auth.log_out') }}">
+                                <i class="fas fa-sign-out-alt"></i> Log Out
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="mt-auto">
+                        <div class="pt-6">
+                            <a class="block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 mb-2 text-xs text-center border border-blue-500 hover:border-transparent rounded-xl"
+                                href="{{ url_for('auth.sign_up') }}">Sign Up</a>
+                            <a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-900 hover:bg-blue-900 rounded-xl"
+                                href="{{ url_for('auth.login') }}">Login</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </nav>
+            </div>
+        </section>
+    </nav>
+
+    <div id="flash-messages" class="fixed top-4 left-1/2 transform -translate-x-1/2 w-full max-w-md space-y-4 z-50">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="space-y-4">
+            {% for category, message in messages %}
+            <div
+                class="bg-white border rounded-lg shadow-lg p-4 flex items-center justify-between {{ 'bg-green-100 border-green-500 text-green-800' if category == 'success' else 'bg-red-100 border-red-500 text-red-800' if category == 'danger' else 'bg-yellow-100 border-yellow-500 text-yellow-800' }}">
+                <span>{{ message }}</span>
+                <button onclick="this.parentElement.remove()"
+                    class="ml-4 text-lg font-semibold text-gray-500 hover:text-gray-700 focus:outline-none">
+                    &times;
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+
+
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 mt-8 bg-white shadow-lg rounded-lg">
+        <p class="text-3xl md:text-4xl font-bold text-gray-900 font-[Merriweather] mt-12">{{ property.description }}
+        </p>
+        <div class="overflow-hidden flex flex-col md:flex-row rounded-lg mt-6">
+
+
+            <!-- Property Image -->
+            <div class="w-full md:w-1/2">
+                <img src="/media/{{ property.image_url }}" alt="{{ property.title }}"
+                    class="w-full h-64 sm:h-72 md:h-full object-cover rounded-t-lg md:rounded-none md:rounded-l-lg">
+            </div>
+
+            <!-- Conditional Content Based on User Authentication -->
+            <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                {% if current_user.is_authenticated %}
+                <!-- Request Information Form for Signed-In Users -->
+                <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Request Information</h2>
+                    <form action="{{ url_for('views.property_request', property_id=property.id) }}" method="post"
+                        class="space-y-4" onsubmit="return validateForm()">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" name="name" id="name"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" name="email" id="email"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                required>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                            <textarea name="message" id="message" rows="4"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                required></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 transition ease-in-out duration-150">
+                            Request Property
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+        <!-- Property Details -->
+        <div class="px-6 py-8">
+            <div class="mt-6 flex flex-col md:flex-row md:justify-around items-center">
+
+                <div class="flex items-center space-x-2">
+                    <h1 class="text-2xl md:text-4xl font-bold text-gray-900">{{ property.title }}</h1>
+                </div>
+
+
+                <div class="flex items-center space-x-2">
+                    <h3 class="text-2xl md:text-4xl font-bold text-gray-900">${{ property.current_price }}</h3>
+                </div>
+
+
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+
+                    <p class="text-2xl md:text-4xl font-bold text-gray-900">{{ property.location }}</p>
+                </div>
+            </div>
+
+            <p class="text-gray-600 mt-4 text-lg leading-relaxed w-2/3 mt-6">FEDORS GROUP offers an exclusive for {{
+                property.category }} elegant
+                large 5-room {{ property.title }} on {{ property.location }} Street in the Condominium Renaissance
+                residential
+                complex.
+                Thanks to its unique location, the property has access to a large Japanese garden with an area of 35 m2,
+                which can be accessed directly from the bedroom. The front of the {{ property.title }} is at the height
+                of the
+                third floor, so the terrace is located just above the treetops, which gives the {{ property.title }} a
+                unique
+                atmosphere. Overall, the {{ property.title }} has a direct view of the Danube River and the surrounding
+                forests.
+                The {{ property.title }} offers extraordinary comfort, has a first-class interior from the leading
+                architectural
+                office Cakov Makara and equipment from renowned world furniture manufacturers. The overall atmosphere of
+                the {{ property.title }} is completed</p>
+
+            <div class="mt-6 space-y-2 text-sm text-gray-600">
+                <p class="text-xl text-black"><strong>Basic characteristics:</strong></p>
+                <p><strong>Category:</strong> {{ property.category }}</p>
+                <p><strong>Status:</strong> {{ 'For Sale' if property.for_sale else 'Not for Sale' }}</p>
+                <p><strong>Available:</strong> {{ 'Yes' if property.available else 'No' }}</p>
+                <p><strong>Bedrooms:</strong> {{ property.bedrooms }} Beds</p>
+                <p><strong>Bathrooms:</strong> {{ property.bathrooms }} Baths</p>
+                <p><strong>Size:</strong> {{ property.size }} sq ft</p>
+                <p><strong>Date Added:</strong> {{ property.date_added.strftime('%B %d, %Y') }}</p>
+            </div>
+            <div class="mt-6 space-y-2 text-sm text-gray-600">
+                <p class="text-xl text-black"><strong>Location:</strong></p>
+                <p class="text-gray-600 mt-4 text-lg leading-relaxed w-2/3 mt-6">The property is located above Devínská
+                    cesta, there is an excellent transport connection. The nearby
+                    housing estate provides complete civic amenities, including shops, cafes, restaurants, schools,
+                    kindergartens and many other benefits</p>
+
+            </div>
+            <div class="mt-6 space-y-2 text-sm text-gray-600">
+                <p class="text-xl text-black"><strong>Fedors group opinion:</strong></p>
+                <p class="text-gray-600 mt-4 text-lg leading-relaxed w-2/3 mt-6">This beautiful {{ property.title }}
+                    offers an
+                    incredible atmosphere. The above-standard area creates the impression of a family house, which is
+                    further enhanced by the view of the Danube River and the forests in its basin. The apartment is
+                    furnished extremely tastefully and really timelessly. From our point of view, this is one of the
+                    most beautiful {{ property.title }} in the current offer - it is guaranteed to provide its owners
+                    with a new
+                    and luxurious standard of living</p>
+
+            </div>
+
+        </div>
+
+        <!-- Back to Properties List -->
+
+        <div class="px-6 py-4">
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('auth.sign_up') }}"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Request</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+    <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+</body>
+
+
+
+
+</html>

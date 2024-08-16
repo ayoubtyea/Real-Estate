@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <script src="https://unpkg.com/split-type"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <title>Who We Are</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#D6D0D0',
+                        navbar: '091638'
+                    },
+                    fontFamily: {
+                        open: ["Open Sans", "sans-serif"],
+                        merri: ["Merriweather", "sans-serif"]
+                    },
+                    colors: {
+                        primary: "#1C3988",
+                        lightbleu: "#F3F3FA",
+                        darkbleu: "#091638",
+                    },
+                }
+            }
+        },
+
+    </script>
+</head>
+
+<body class="font-sans">
+    <nav>
+        <section>
+            <div
+                class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative py-4 flex justify-between items-center mt-12">
+                <a class="text-3xl font-bold leading-none cursor-pointer" href="{{ url_for('views.home') }}">
+                    <img src="{{ url_for('static', filename='images/BlueLogo.png') }}" alt="Logo">
+                </a>
+                <div class="lg:hidden">
+                    <button class="navbar-burger flex items-center text-blue-600 p-3">
+                        <svg class="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <title>Mobile menu</title>
+                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <ul
+                    class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6">
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500" href="{{ url_for('views.search') }}">Search
+                            in offers</a></li>
+                    <li class="text-gray-300"></li>
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500" href="{{ url_for('views.who') }}">Who We
+                            Are</a></li>
+                    <li class="text-gray-300"></li>
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500 cursor-pointer px-5 py-2" href="#"
+                            onclick="toggleSlideover()">Contacts</a></li>
+                </ul>
+
+                {% if current_user.is_authenticated %}
+                <div class="hidden lg:block relative">
+                    <button
+                        class="text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        onclick="toggleDropdown()">
+                        Account
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <div id="dropdownMenu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20">
+                        <a href="/profile/{{ current_user.id }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="{{ url_for('auth.log_out') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="hidden lg:block">
+                    <a class="hidden lg:inline-block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1.5 px-4 rounded-xl"
+                        href="{{ url_for('auth.sign_up') }}">Sign Up</a>
+                    <a class="hidden lg:inline-block py-2 px-4 bg-blue-800 hover:bg-blue-400 text-white font-bold rounded-xl"
+                        href="{{ url_for('auth.login') }}">Login</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="navbar-menu hidden z-50">
+                <div class="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25 hidden"></div>
+                <nav
+                    class="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
+                    <div class="flex items-center mb-8 justify-between">
+                        <a class="text-3xl font-bold leading-none cursor-pointer" href="{{ url_for('views.home') }}">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                        </a>
+                        <button class="navbar-close">
+                            <svg class="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div>
+                        <ul>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
+                                    href="{{ url_for('views.search') }}">Search in offers</a>
+                            </li>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
+                                    href="{{ url_for('views.who') }}">Who We Are</a>
+                            </li>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded cursor-pointer px-5 py-2"
+                                    href="#" onclick="toggleSlideover()">Contacts</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {% if current_user.is_authenticated %}
+                    <div class="mt-auto">
+                        <div class="pt-6">
+                            <a class="block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 mb-2 text-xs text-center border border-blue-500 hover:border-transparent rounded-xl"
+                                href="{{ url_for('auth.log_out') }}">
+                                <i class="fas fa-sign-out-alt"></i> Log Out
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="mt-auto">
+                        <div class="pt-6">
+                            <a class="block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 mb-2 text-xs text-center border border-blue-500 hover:border-transparent rounded-xl"
+                                href="{{ url_for('auth.sign_up') }}">Sign Up</a>
+                            <a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-900 hover:bg-blue-900 rounded-xl"
+                                href="{{ url_for('auth.login') }}">Login</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </nav>
+            </div>
+        </section>
+    </nav>
+    <!-- header -->
+    <header class="mt-[40px] lg:flex justify-between max-w-[1200px] gap-2 px-6 lg:mx-auto">
+        <div class="lg:self-end">
+
+            <h1 id="text"
+                class="font-[Merriweather] text-[35px] text-[#091638] leading-[70px] text-center font-bold lg:text-start lg:px-0 animate__animated animate__fadeInUp"
+                style="clip-path: polygon(0 1%, 100% 0, 100% 100%, 0% 100%);">Who we are</h1>
+
+            <p
+                class="font-normal leading-[26px] text-[17px] text-[#091638] px-4 text-center lg:text-start lg:w-[352px] lg:px-0 animate__animated animate__fadeInLeft">
+                We are a company that connects the world of real estate and finance. We provide a complete service for
+                the sale, and rental of real estate. Our advantage is more than 16 years of experience and soil in
+                attractive locations in Morroco.</p>
+            <br>
+            <p
+                class="font-normal leading-[26px] text-[17px] text-[#091638] px-4 text-center lg:text-start lg:w-[352px] lg:px-0 animate__animated animate__fadeInRight">
+                We have a connection to all banks on the Slovak market, so we can solve everything under one roof. By
+                constantly innovating our business activities, we move forward and we are able to offer truly
+                above-standard services that set us apart from the competition.</p>
+        </div>
+        <div class="mt-12 w-[300px] mx-auto md:w-[500px] lg:w-[600px] lg:mx-0 animate__animated animate__fadeInDown">
+            <img src="{{ url_for('static', filename='images/who.png') }}"
+                class="transform transition-all hover:translate-x-6" alt="who we are" loading="lazy">
+        </div>
+    </header>
+    <!-- mission -->
+    <section
+        class="mt-[80px] lg:flex justify-between items-center gap-4 px-6 flex-row-reverse max-w-[1200px] lg:mx-auto">
+        <div class="lg:w-[50%]">
+            <h1 id="text"
+                class="font-[Merriweather] text-[35px] text-[#091638] leading-[70px] text-center font-bold lg:text-start lg:px-0 animate__animated animate__fadeInUp"
+                style="clip-path: polygon(0 1%, 100% 0, 100% 100%, 0% 100%);">Our Mission</h1>
+            <p
+                class="font-normal leading-[26px] text-[17px] text-[#091638] px-4 text-center lg:text-start lg:px-0 animate__animated animate__fadeInLeft">
+                Our mission is to provide our clients with personalized and high-quality service, guiding them through
+                every step of the process of selling or renting their property. We are committed to understanding their
+                unique needs and offering tailored solutions, while ensuring transparency and integrity.</p>
+        </div>
+        <div class="mt-12 w-[300px] mx-auto md:w-[500px] lg:mx-0 animate__animated animate__fadeInDown">
+            <img src="{{ url_for('static', filename='images/mission.png') }}"
+                class="transform transition-all hover:translate-x-6" alt="mission" loading="lazy">
+        </div>
+    </section>
+
+
+    <!-- offer -->
+    <section class="mt-[80px] max-w-[1200px] lg:mx-auto">
+        <h1
+            class="font-[Merriweather] text-[35px] text-[#091638] leading-[70px] text-center font-bold lg:text-start lg:px-0 lg:pl-6">
+            What We Offer</h1>
+        <article class="mt-[40px] lg:w-[470px] lg:mx-auto lg:mr-[9rem]">
+            <div class="lg:mt-[-60px]">
+                <!-- first -->
+                <div class="">
+                    <div
+                        class="w-[40px] h-[40px] bg-[#1c3988] rounded-full relative self-start left-[-4rem] top-[2.4rem]">
+                        <span class="absolute text-[#fff] top-2 left-[40%] font-semibold">1</span>
+                        <div class="w-[1px] absolute h-[5.3rem] bg-[#5167a4] top-[2.7rem] left-[1.2rem]"></div>
+                    </div>
+                    <div>
+                        <h2
+                            class="font-bold text-[20px] text-center text-[#1c3988] lg:text-[#091638] lg:text-start lg:text-[25]">
+                            Property Sales:</h2>
+                        <p class="mt-[15px] text-[#091638] px-4 text-center font-normal lg:text-start lg:pl-0">Whether
+                            you are looking to sell your house, apartment, or commercial property, we assist you in
+                            maximizing the value of your property..</p>
+                    </div>
+                </div>
+                <!-- second -->
+                <div class="mt-[15px] lg:mt-[-25px]">
+                    <div
+                        class="w-[40px] h-[40px] bg-[#1c3988] rounded-full relative self-start left-[-4rem] top-[2.2rem]">
+                        <span class="absolute text-[#fff] top-2 left-[40%] font-semibold">2</span>
+                        <div class="w-[1px] absolute h-[4rem] bg-[#5167a4] top-[2.7rem] left-[1.2rem]"></div>
+                    </div>
+                    <div>
+                        <h2
+                            class="font-bold text-[20px] text-center text-[#1c3988] lg:text-[#091638] lg:text-start lg:text-[25]">
+                            Property Rentals:</h2>
+                        <p class="mt-[15px] text-[#091638] px-4 text-center font-normal lg:text-start lg:pl-0">We help
+                            property owners find reliable tenants and assist tenants in finding their ideal home.</p>
+                    </div>
+                </div>
+                <!-- third -->
+                <div class="mt-[15px] lg:mt-[-25px]">
+                    <div
+                        class="w-[40px] h-[40px] bg-[#1c3988] rounded-full relative self-start left-[-4rem] top-[2.2rem]">
+                        <span class="absolute text-[#fff] top-2 left-[40%] font-semibold">3</span>
+                        <div class="w-[1px] absolute h-[3.9rem] bg-[#5167a4] top-[2.7rem] left-[1.2rem]"></div>
+                    </div>
+                    <div>
+                        <h2
+                            class="font-bold text-[20px] text-center text-[#1c3988] lg:text-[#091638] lg:text-start lg:text-[25]">
+                            Real Estate Consulting:</h2>
+                        <p class="mt-[15px] text-[#091638] px-4 text-center font-normal lg:text-start lg:pl-0">Our
+                            experts provide you with sound advice to help you make informed decisions in the real estate
+                            market.</p>
+                    </div>
+                </div>
+
+                <!-- fourth -->
+                <div class="mt-[15px] lg:mt-[-25px]">
+                    <div
+                        class="w-[40px] h-[40px] bg-[#1c3988] rounded-full relative self-start left-[-4rem] top-[2.2rem]">
+                        <span class="absolute text-[#fff] top-2 left-[40%] font-semibold">4</span>
+                    </div>
+                    <div>
+                        <h2
+                            class="font-bold text-[20px] text-center text-[#1c3988] lg:text-[#091638] lg:text-start lg:text-[25]">
+                            Property Management:</h2>
+                        <p class="mt-[15px] text-[#091638] px-4 text-center font-normal lg:text-start lg:pl-0">We offer
+                            property management services to ensure your real estate investment is well-maintained and
+                            profitable.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+
+
+    <!-- vision -->
+    <section class="mt-[80px] max-w-[1200px] lg:mx-auto">
+        <h1
+            class="font-[Merriweather] text-[35px] text-[#091638] leading-[70px] text-center font-bold md:text-start md:px-6">
+            Our Vision</h1>
+        <p
+            class="font-normal leading-[26px] text-[17px] text-[#091638] px-4 text-center md:text-start md:w-[90%] md:px-6">
+            We aspire to be the benchmark in real estate services by offering exceptional client experiences and
+            contributing to our clients' success in all their real estate transactions. We envision a future where every
+            client finds happiness in real estate through our support and expertise. <br><br>
+            Thank you for trusting <span class="text-[#1c3988] font-bold">Manzel</span> . We look forward to helping you
+            achieve your real estate goals and providing you with superior service.
+        </p>
+    </section>
+
+    <!-- footer -->
+    <footer class="relative text-center bg-blue-900 text-white max-w-7xl mx-auto mt-12">
+        <div class="px-4 py-4 md:py-14 xl:pt-20 xl:pb-12 flex flex-col items-center">
+            <img src="{{ url_for('static', filename='images/logo2.png')}}" class="w-32 h-auto mb-9 xl:mb-9">
+            <div class="flex space-x-4 items-center">
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-facebook-f w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-twitter w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-instagram w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-linkedin-in w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CONTACT US -->
+
+    <div class="contact slide relative w-full h-full z-50">
+        <div class=" w-full h-full flex items-center justify-center">
+            <!-- Slideover Container -->
+            <div id="slideover-container" class="w-full h-full fixed inset-0 invisible">
+                <div onclick="toggleSlideover()" id="slideover-bg" class="absolute inset-0 bg-gray-900 opacity-50">
+                </div>
+                <div id="slideover"
+                    class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out">
+                    <!-- Close Button -->
+                    <button onclick="toggleSlideover()"
+                        class="absolute top-0 right-0 m-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <!-- Contact Content -->
+                    <div
+                        class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-20 h-full flex flex-col justify-center mt-12">
+                        <div class="mb-6 max-w-xl">
+                            <h2 class="text-xl sm:text-xl lg:text-2xl text-blue-900  mb-4 font-medium leading-tight">
+                                Please do not hesitate to contact us with any questions or requests for information.
+                            </h2>
+                        </div>
+                        <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-1">
+                            <!-- Contact Methods -->
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-solid fa-phone text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                        Phone At:</h3>
+                                    <p class="text-blue-900">+121 685 886602</p>
+                                    <p class="text-blue-500">Monday to Friday, 9:00 AM to 6:00 PM
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-solid fa-envelope-open text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                        email by sending your message to:</h3>
+                                    <p class="text-blue-900">manzel.21@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-brands fa-whatsapp text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">Or via
+                                        direct chat on WhatsApp at:</h3>
+                                    <p class="text-blue-900">+1(514) 555-1234</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+
+
+</body>
+
+</html>

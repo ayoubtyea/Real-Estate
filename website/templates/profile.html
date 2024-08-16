@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+        referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    <link rel="stylesheet" href="/tailwind.config.js">
+    <link rel="stylesheet" href="../static/css/tailwind.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link href="path/to/your/tailwind.css" rel="stylesheet">
+    <title>Real Estate | {% block title %} {% endblock %}</title>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#D6D0D0',
+                        navbar: '091638'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .flash-message {
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .flash-message.hide {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="">
+        <nav class="lg:flex justify-between gap-8 px-6 mt-8 max-w-screen-xl mx-auto">
+            <div class="flex items-center">
+                <a href="{{ url_for('views.home') }}">
+                    <img src="{{ url_for('static', filename='images/BlueLogo.png') }}" alt="Logo" class="h-10">
+                </a>
+            </div>
+            <div class="user-avatar flex items-center">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('auth.log_out') }}" class="ml-4 hidden lg:block w-14 h-9">
+                    <img src="{{ url_for('static', filename='images/logout.png') }}" alt="User Icon">
+                </a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="hover:text-gray-300">Login</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div id="flash-messages" class="fixed top-0 left-0 w-full flex justify-center items-center z-50">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="w-full max-w-md text-center">
+                {% for category, message in messages %}
+                <div class="flash-message px-4 py-3 rounded relative shadow-md mt-4
+                    {% if category == 'info_error' or category == 'password_error' %} bg-red-100 border border-red-400 text-red-700 {% elif category == 'info_success' or category == 'password_success' %} bg-green-100 border border-green-400 text-green-700 {% endif %}"
+                    role="alert">
+                    <strong class="font-bold">{% if category == 'info_error' or category == 'password_error' %} Error!
+                        {% elif category == 'info_success' or category == 'password_success' %} Success! {% endif
+                        %}</strong>
+                    <span class="block sm:inline">{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mt-11">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="side-dashboard bg-blue-900 rounded-lg min-h-screen">
+                    <div class="md:col-span-1 bg-blue-900 p-4 rounded-lg hover:bg-blue-800 transition-colors duration-300"
+                        onclick="showForm('personal-information')">
+                        <h2 class="text-xl font-bold mb-4 flex items-center text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 448 512">
+                                <path fill="white"
+                                    d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+                            </svg>
+                            Personal Information
+                        </h2>
+                        <p class="text-sm leading-relaxed ml-7 text-white">
+                            You can update your information
+                        </p>
+                    </div>
+                    <div class="md:col-span-1 bg-blue-900 p-4 rounded-lg hover:bg-blue-800 transition-colors duration-300"
+                        onclick="showForm('password')">
+                        <h2 class="text-xl font-bold mb-4 flex items-center text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 448 512">
+                                <path fill="white"
+                                    d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
+                            </svg>
+                            Password
+                        </h2>
+                        <p class="text-sm leading-relaxed ml-7 text-white">
+                            You can update your password
+                        </p>
+                    </div>
+                    <div class="md:col-span-1 bg-blue-900 p-4 rounded-lg hover:bg-blue-800 transition-colors duration-300"
+                        onclick="showForm('orders')">
+                        <h2 class="text-xl font-bold mb-4 flex items-center text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-6 w-6 mr-2">
+                                <path fill="white"
+                                    d="M234.5 5.7c13.9-5 29.1-5 43.1 0l192 68.6C495 83.4 512 107.5 512 134.6V377.4c0 27-17 51.2-42.5 60.3l-192 68.6c-13.9 5-29.1 5-43.1 0l-192-68.6C17 428.6 0 404.5 0 377.4V134.6c0-27 17-51.2 42.5-60.3l192-68.6zM256 66L82.3 128 256 190l173.7-62L256 66zm32 368.6l160-57.1v-188L288 246.6v188z" />
+                            </svg>
+                            Orders
+                        </h2>
+                        <p class="text-sm leading-relaxed ml-7 text-white">
+                            You can check your orders
+                        </p>
+                    </div>
+                </div>
+                <div id="form-container" class="md:col-span-2 bg-gray-100 shadow-md rounded-lg px-6 py-4">
+                    <form id="personal-information-form"
+                        action="{{ url_for('auth.profile', customer_id=current_user.id) }}" method="POST"
+                        class="space-y-4 slide-out-right hidden">
+                        {{ profile_form.hidden_tag() }}
+                        <h1 class="text-3xl text-blue-800 font-bold mb-6">Your Information</h1>
+                        <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                            <div>
+                                <label for="first_name" class="block text-sm font-medium text-gray-700">First
+                                    Name</label>
+                                {{ profile_form.first_name(class="border p-2 rounded-md w-full focus:outline-none
+                                focus:ring focus:border-blue-500", placeholder="Enter your first name") }}
+                            </div>
+                            <div>
+                                <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                {{ profile_form.last_name(class="border p-2 rounded-md w-full focus:outline-none
+                                focus:ring focus:border-blue-500", placeholder="Enter your last name") }}
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                {{ profile_form.email(class="border p-2 rounded-md w-full focus:outline-none focus:ring
+                                focus:border-blue-500", placeholder="Enter your email address") }}
+                            </div>
+                            <div>
+                                <label for="phone_number" class="block text-sm font-medium text-gray-700">Phone
+                                    Number</label>
+                                {{ profile_form.phone_number(class="border p-2 rounded-md w-full focus:outline-none
+                                focus:ring focus:border-blue-500", placeholder="Enter your phone number") }}
+                            </div>
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                                {{ profile_form.address(class="border p-2 rounded-md w-full focus:outline-none
+                                focus:ring focus:border-blue-500", placeholder="Enter your address") }}
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            {{ profile_form.submit_profile(class="bg-blue-800 hover:bg-blue-600 text-white px-4 py-2
+                            rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                        </div>
+                    </form>
+                    <form id="password-form" action="{{ url_for('auth.profile', customer_id=current_user.id) }}"
+                        method="POST" class="space-y-4 slide-out-right hidden">
+                        {{ password_form.hidden_tag() }}
+                        <h1 class="text-3xl text-blue-800 font-bold mb-6">Change Password</h1>
+                        <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                            <div>
+                                <label for="current_password" class="block text-sm font-medium text-gray-700">Current
+                                    Password</label>
+                                {{ password_form.current_password(class="border p-2 rounded-md w-full focus:outline-none
+                                focus:ring focus:border-blue-500", placeholder="Enter your current password") }}
+                            </div>
+                            <div>
+                                <label for="new_password" class="block text-sm font-medium text-gray-700">New
+                                    Password</label>
+                                {{ password_form.new_password(class="border p-2 rounded-md w-full focus:outline-none
+                                focus:ring focus:border-blue-500", placeholder="Enter your new password") }}
+                            </div>
+                            <div>
+                                <label for="confirm_new_password"
+                                    class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                                {{ password_form.confirm_new_password(class="border p-2 rounded-md w-full
+                                focus:outline-none focus:ring focus:border-blue-500",
+                                placeholder="Confirm your new password") }}
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            {{ password_form.submit_password(class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2
+                            rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                        </div>
+                    </form>
+                    <div id="orders-form" class="slide-out-right hidden">
+                        <h1 class="text-3xl text-blue-800 font-bold mb-6">Your Orders</h1>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                                <thead class="bg-blue-800 text-white">
+                                    <tr>
+                                        <th class="py-3 px-6 text-left cursor-pointer">Image</th>
+                                        <th class="py-3 px-6 text-left cursor-pointer">Order</th>
+                                        <th class="py-3 px-6 text-left cursor-pointer">ID</th>
+                                        <th class="py-3 px-6 text-left cursor-pointer">Price</th>
+                                        <th class="py-3 px-6 text-left cursor-pointer">Location</th>
+                                        <th class="py-3 px-6 text-left cursor-pointer">Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    {% for request in requests %}
+                                    {% set property = request.property %}
+                                    <tr>
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center">
+                                                <img src="/media/{{ property.image_url }}" alt="Property Icon"
+                                                    class="h-8 w-8 mr-2">
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6">{{ property.title }}</td>
+                                        <td class="py-4 px-6">{{ property.id }}</td>
+                                        <td class="py-4 px-6">{{ property.current_price }}</td>
+                                        <td class="py-4 px-6">{{ property.location }}</td>
+                                        <td class="py-4 px-6">{{ property.category }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+</body>
+
+</html>

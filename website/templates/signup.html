@@ -1,0 +1,73 @@
+{% extends 'forms.html' %}
+
+{% block title %} Sign Up {% endblock %}
+
+{% block body %}
+
+<body class="font-sans">
+    <div class="flex items-center justify-center min-h-screen bg-gray-200 bg-opacity-75">
+        <div class="form-container p-6 sm:p-8 md:p-10 lg:p-20 rounded-2xl shadow-lg max-w-md w-full bg-white">
+            <img src="{{ url_for('static', filename='images/LogoWhite.png') }}" alt="Logo" class="h-10 text-left mb-36">
+            <h2 class="text-2xl font-bold mb-5 text-center text-blue-600">Sign Up</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                    <span class="block sm:inline">{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('auth.sign_up') }}">
+                {{ form.hidden_tag() }}
+                <div class="mb-4">
+                    {{ form.first_name(class="w-full p-2 border border-gray-300 rounded-lg", placeholder="First Name")
+                    }}
+                    {% for error in form.first_name.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    {{ form.last_name(class="w-full p-2 border border-gray-300 rounded-lg", placeholder="Last Name") }}
+                    {% for error in form.last_name.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    {{ form.email(class="w-full p-2 border border-gray-300 rounded-lg", placeholder="Email") }}
+                    {% for error in form.email.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    {{ form.password1(class="w-full p-2 border border-gray-300 rounded-lg",
+                    placeholder="Enter Your Password") }}
+                    {% for error in form.password1.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    {{ form.password2(class="w-full p-2 border border-gray-300 rounded-lg",
+                    placeholder="Confirm Your Password") }}
+                    {% for error in form.password2.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    {{ form.submit(class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50") }}
+                </div>
+                <div class="text-center">
+                    <a href="{{ url_for('auth.login') }}" class="text-gray-700 hover:underline text-xl">Or
+                        <span class="text-blue-700">Log In</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+{% endblock %}

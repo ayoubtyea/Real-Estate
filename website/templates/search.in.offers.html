@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <script src="https://unpkg.com/split-type"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <title>Offers</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#D6D0D0',
+                        navbar: '091638'
+                    },
+                    fontFamily: {
+                        open: ["Open Sans", "sans-serif"],
+                        merri: ["Merriweather", "sans-serif"]
+                    },
+                    colors: {
+                        primary: "#1C3988",
+                        lightbleu: "#F3F3FA",
+                        darkbleu: "#091638",
+                    },
+                }
+            }
+        },
+
+    </script>
+</head>
+
+<body>
+    <nav>
+        <section>
+            <div
+                class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative py-4 flex justify-between items-center mt-12">
+                <a class="text-3xl font-bold leading-none cursor-pointer" href="{{ url_for('views.home') }}">
+                    <img src="{{ url_for('static', filename='images/BlueLogo.png') }}" alt="Logo">
+                </a>
+                <div class="lg:hidden">
+                    <button class="navbar-burger flex items-center text-blue-600 p-3">
+                        <svg class="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <title>Mobile menu</title>
+                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <ul
+                    class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6">
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500" href="{{ url_for('views.search') }}">Search
+                            in offers</a></li>
+                    <li class="text-gray-300"></li>
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500" href="{{ url_for('views.who') }}">Who We
+                            Are</a></li>
+                    <li class="text-gray-300"></li>
+                    <li><a class="text-sm text-gray-900 hover:text-gray-500 cursor-pointer px-5 py-2" href="#"
+                            onclick="toggleSlideover()">Contacts</a></li>
+                </ul>
+
+                {% if current_user.is_authenticated %}
+                <div class="hidden lg:block relative">
+                    <button
+                        class="text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        onclick="toggleDropdown()">
+                        Account
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <div id="dropdownMenu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20">
+                        <a href="/profile/{{ current_user.id }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="{{ url_for('auth.log_out') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="hidden lg:block">
+                    <a class="hidden lg:inline-block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1.5 px-4 rounded-xl"
+                        href="{{ url_for('auth.sign_up') }}">Sign Up</a>
+                    <a class="hidden lg:inline-block py-2 px-4 bg-blue-800 hover:bg-blue-400 text-white font-bold rounded-xl"
+                        href="{{ url_for('auth.login') }}">Login</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="navbar-menu hidden z-50">
+                <div class="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25 hidden"></div>
+                <nav
+                    class="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
+                    <div class="flex items-center mb-8 justify-between">
+                        <a class="text-3xl font-bold leading-none cursor-pointer" href="{{ url_for('views.home') }}">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                        </a>
+                        <button class="navbar-close">
+                            <svg class="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div>
+                        <ul>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
+                                    href="{{ url_for('views.search') }}">Search in offers</a>
+                            </li>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
+                                    href="{{ url_for('views.who') }}">Who We Are</a>
+                            </li>
+                            <li class="mb-1">
+                                <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded cursor-pointer px-5 py-2"
+                                    href="#" onclick="toggleSlideover()">Contacts</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {% if current_user.is_authenticated %}
+                    <div class="mt-auto">
+                        <div class="pt-6">
+                            <a class="block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 mb-2 text-xs text-center border border-blue-500 hover:border-transparent rounded-xl"
+                                href="{{ url_for('auth.log_out') }}">
+                                <i class="fas fa-sign-out-alt"></i> Log Out
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="mt-auto">
+                        <div class="pt-6">
+                            <a class="block bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 mb-2 text-xs text-center border border-blue-500 hover:border-transparent rounded-xl"
+                                href="{{ url_for('auth.sign_up') }}">Sign Up</a>
+                            <a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-900 hover:bg-blue-900 rounded-xl"
+                                href="{{ url_for('auth.login') }}">Login</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </nav>
+            </div>
+        </section>
+    </nav>
+    <section class="font-open">
+        <!-- Hero Section -->
+        <section class="text-darkbleu px-4 py-8 lg:px-8 lg:py-16 max-w-[1200px] mx-auto">
+            <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center">
+                <div class="space-y-4 lg:space-y-6 max-w-md">
+                    <h2 class="text-3xl lg:text-5xl font-[Merriweather]">Search for an offer</h2>
+                    <p class="text-lg lg:text-xl">Choose from the most advantageous offers.</p>
+                </div>
+                <div class="mt-8 lg:mt-0 lg:ml-12 flex max-w-xs lg:max-w-7xl">
+                    <select id="category-filter"
+                        class="w-full border border-gray-300 rounded-md py-2 px-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
+                        <option value="all">All Categories</option>
+                        <option value="sell">Sell</option>
+                        <option value="rent">Rent</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards Section -->
+        <section class="font-mulish max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 bg-white">
+            <div id="property-cards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+                {% for property in properties %}
+                <div class="property-card relative bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden group"
+                    data-category="{{ property.category }}">
+                    <a href="{{ url_for('views.property_detail', property_id=property.id) }}" class="block">
+                        <img src="/media/{{ property.image_url }}" alt="Property Image"
+                            class="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover transition-transform transform group-hover:scale-105 duration-300">
+                    </a>
+                    <div class="p-4">
+                        <button data-category="{{ property.category }}"
+                            class="absolute top-4 left-4 bg-blue-800 text-white text-xs font-semibold py-1 px-2 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            {{ property.category }}
+                        </button>
+                        <span class="block text-lg lg:text-xl font-bold text-gray-900 mt-2">${{ property.current_price
+                            }}</span>
+                        <a href="{{ url_for('views.property_detail', property_id=property.id) }}" class="block mt-2">
+                            <h5 class="text-base lg:text-lg font-semibold text-gray-900">{{ property.description }}</h5>
+                        </a>
+                        <div class="flex items-center mt-3 text-sm text-gray-600">
+                            <i class="fa-solid fa-location-dot mr-2"></i>
+                            <p>{{ property.location }}</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center text-sm">
+                                    <i class="fa-solid fa-bed text-gray-700"></i>
+                                    <p class="ml-1 text-gray-700">{{ property.bedrooms }}</p>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <i class="fa-solid fa-shower text-gray-700"></i>
+                                    <p class="ml-1 text-gray-700">{{ property.bathrooms }}</p>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-700">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M16.5 8.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v8.25A2.25 2.25 0 0 0 6 16.5h2.25m8.25-8.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-7.5A2.25 2.25 0 0 1 8.25 18v-1.5m8.25-8.25h-6a2.25 2.25 0 0 0-2.25 2.25v6" />
+                                    </svg>
+                                    <p class="ml-1 text-gray-700">{{ property.size }} sq ft</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="#"
+                    class="inline-flex items-center px-6 py-3 text-base font-semibold text-white bg-blue-800 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300">
+                    Show next
+                    <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+
+        <!-- Footer -->
+
+    </section>
+    <!-- footer -->
+    <footer class="relative text-center bg-blue-900 text-white max-w-7xl mx-auto mt-12">
+        <div class="px-4 py-4 md:py-14 xl:pt-20 xl:pb-12 flex flex-col items-center">
+            <img src="{{ url_for('static', filename='images/logo2.png')}}" class="w-32 h-auto mb-9 xl:mb-9">
+            <div class="flex space-x-4 items-center">
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-facebook-f w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-twitter w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-instagram w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-300">
+                    <i class="fab fa-linkedin-in w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CONTACT US -->
+
+    <div class="contact slide relative w-full h-full z-50">
+        <div class=" w-full h-full flex items-center justify-center">
+            <!-- Slideover Container -->
+            <div id="slideover-container" class="w-full h-full fixed inset-0 invisible">
+                <div onclick="toggleSlideover()" id="slideover-bg" class="absolute inset-0 bg-gray-900 opacity-50">
+                </div>
+                <div id="slideover"
+                    class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out">
+                    <!-- Close Button -->
+                    <button onclick="toggleSlideover()"
+                        class="absolute top-0 right-0 m-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <!-- Contact Content -->
+                    <div
+                        class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-20 h-full flex flex-col justify-center mt-12">
+                        <div class="mb-6 max-w-xl">
+                            <h2 class="text-xl sm:text-xl lg:text-2xl text-blue-900  mb-4 font-medium leading-tight">
+                                Please do not hesitate to contact us with any questions or requests for information.
+                            </h2>
+                        </div>
+                        <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-1">
+                            <!-- Contact Methods -->
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-solid fa-phone text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                        Phone At:</h3>
+                                    <p class="text-blue-900">+121 685 886602</p>
+                                    <p class="text-blue-500">Monday to Friday, 9:00 AM to 6:00 PM
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-solid fa-envelope-open text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                        email by sending your message to:</h3>
+                                    <p class="text-blue-900">manzel.21@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-brands fa-whatsapp text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">Or via
+                                        direct chat on WhatsApp at:</h3>
+                                    <p class="text-blue-900">+1(514) 555-1234</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+</body>
+
+</html>

@@ -1,0 +1,451 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+<section class="font-mulish max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-[#F3F3FA]">
+    <div class="max-w-[1200px] 2xl:max-w-[1200px] mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 py-8 px-4">
+            <!-- Text Section -->
+            <div class="flex flex-col items-center justify-center lg:items-start lg:text-left text-center">
+                <h2
+                    class="text-4xl font-[Merriweather] leading-[70px]  lg:text-7xl 2xl:text-7xl leading-tight text-[#091638] mb-4 lg:max-w-lg 2xl:max-w-2xl">
+                    Welcome To Manzel
+                </h2>
+                <p
+                    class="text-lg font-[Merriweather] lg:text-xl 2xl:text-2xl text-[#091638] dark:text-gray-400 mb-4 lg:max-w-lg 2xl:max-w-xl">
+                    We provide a complete service for the sale and rental of real estate. Operating in Morocco for
+                    over 15 years.
+                </p>
+            </div>
+
+            <!-- Carousel Section -->
+            <div class="flex justify-center items-center lg:justify-start z-40">
+                <ul class="flex carousel-container">
+                    <li class="carousel" data-pos="-2">
+                        <img class="card" src="{{ url_for('static', filename='images/Rectangle 3.png') }}" alt="">
+                        <img class="card" src="{{ url_for('static', filename='images/Rectangle 6.png') }}" alt="">
+                        <img class="card" src="{{ url_for('static', filename='images/Rectangle 7.png') }}" alt="">
+                        <img class="card" src="{{ url_for('static', filename='images/Rectangle 8.png') }}" alt="">
+                        <img class="card" src="{{ url_for('static', filename='images/Rectangle 9.png') }}" alt="">
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="hidden sm:block lg:flex flex-col items-center lg:items-start">
+            <div class="grid sm:grid-cols-3 lg:gap-0 2xl:gap-12 p-6 h-full">
+                <div class="flex flex-col p-6">
+                    <dd class="mt-1 text-2xl lg:text-3xl 2xl:text-4xl font-extrabold text-blue-900">200+</dd>
+                    <dt class="text-sm lg:text-base 2xl:text-lg font-medium text-blue-900">
+                        Happy Customers
+                    </dt>
+
+                </div>
+                <div class="flex flex-col p-6">
+                    <dd class="mt-1 text-2xl lg:text-3xl 2xl:text-4xl font-extrabold text-blue-900">10K+</dd>
+                    <dt class="text-sm lg:text-base 2xl:text-lg font-medium text-blue-900">
+                        Properties For Clients
+                    </dt>
+
+                </div>
+                <div class="flex flex-col p-6">
+                    <dd class="mt-1 text-2xl lg:text-3xl 2xl:text-4xl font-extrabold text-blue-900">15+</dd>
+                    <dt class="text-sm lg:text-base 2xl:text-lg font-medium text-blue-900">
+                        Years Of Experience
+                    </dt>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- OFFERS SECTION  -->
+<section class="font-mulish max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 mt-8 bg-white">
+    <div
+        class="flex flex-col lg:flex-row items-center lg:justify-between text-center lg:text-left font-light text-gray-500 sm:text-lg dark:text-gray-400">
+        <div class="lg:w-2/3 mb-4 lg:mb-0">
+            <h2 class="mb-4 text-5xl leading-tight tracking-tight font-[Merriweather] leading-[70px] text-gray-900">
+                Top Offers
+            </h2>
+            <p class="mb-4 w-full lg:w-1/1 text-[#091638]">
+                Fill Your Career Dreams, Enjoy All The Achievements Of The City Center And Luxury Housing To The Fullest
+            </p>
+        </div>
+        <div class="flex justify-center items-center lg:w-1/3 lg:justify-end mt-4 lg:mt-0">
+            <div class="dropdown inline-block relative mb-12">
+                <button
+                    class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full inline-flex items-center">
+                    <span class="mr-1">All Properties</span>
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                </button>
+                <ul class="dropdown-menu absolute hidden text-gray-700 dark:text-gray-300 pt-1">
+                    <li>
+                        <a class="text-blue-700 font-semibold hover:text-black py-2 px-4 inline-flex items-center"
+                            href="#">Sale</a>
+                    </li>
+                    <li>
+                        <a class="text-blue-700 font-semibold hover:text-black py-2 px-4 inline-flex items-center"
+                            href="#">Rent</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARDS -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            {% for property in properties %}
+            <div class="relative bg-white border border-gray-200 shadow-lg rounded-lg">
+                <button
+                    class="absolute top-2 left-2 bg-blue-800 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
+                    {{ property.category }}
+                </button>
+                <a href="#">
+                    <img src="/media/{{ property.image_url }}" alt="Property Image"
+                        class="w-full rounded-t-lg object-cover h-48 sm:h-56 md:h-64 lg:h-72">
+                </a>
+                <div class="px-4 py-3">
+                    <span class="text-lg font-bold text-gray-900">${{ property.current_price }}</span>
+                    <a href="#">
+                        <h5 class="text-lg font-semibold tracking-tight text-gray-900 mt-2">
+                            {{ property.description }}
+                        </h5>
+                    </a>
+                    <div class="flex justify-between items-center mt-2 mb-4">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-location-dot text-gray-700"></i>
+                            <p class="ml-2 text-gray-700 text-sm">{{ property.location }}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="flex items-center text-sm">
+                                <i class="fa-solid fa-bed text-gray-700"></i>
+                                <p class="ml-1 text-gray-700">{{ property.bedrooms }}</p>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i class="fa-solid fa-shower text-gray-700"></i>
+                                <p class="ml-1 text-gray-700">{{ property.bathrooms }}</p>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-700">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.5 8.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v8.25A2.25 2.25 0 0 0 6 16.5h2.25m8.25-8.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-7.5A2.25 2.25 0 0 1 8.25 18v-1.5m8.25-8.25h-6a2.25 2.25 0 0 0-2.25 2.25v6" />
+                                </svg>
+                                <p class="ml-1 text-gray-700">{{ property.size }} sq ft</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="{{ url_for('views.search') }}"
+                class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-[#1C3988] rounded-full hover:bg-[#142e56] transition-colors duration-300">
+                See All Listings
+                <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M1 5h12m0 0L9 1m4 4L9 9" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <!-- END OF CARDS -->
+
+
+</section>
+
+<!-- END OF OFFERS SECTION -->
+
+<!-- Why Choose Us -->
+
+<div class="bg-gray-100">
+    <section id="features" class="relative block px-6 py-10 md:py-20 md:px-10">
+        <div class="mx-auto max-w-5xl text-center">
+            <h2 class="text-5xl font-[Merriweather] animate-move-up">Why Choose Us</h2>
+        </div>
+
+        <div class="mx-auto max-w-7xl grid grid-cols-1 gap-10 pt-14 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="p-8 text-center">
+                <div class="button-text mx-auto flex h-12 w-12 items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Icon 1">
+                </div>
+                <h3 class="mt-6 text-xl font-medium text-[#091638]">Find Your Future Home</h3>
+                <p class="my-4 font-mulish  text-[#091638] leading-relaxed">We Help You To Find New Home By
+                    Offering A
+                    Smart Real Estate Experience</p>
+            </div>
+
+            <div class="p-8 text-center">
+                <div class="button-text mx-auto flex h-12 w-12 items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/icon (1).png') }}" alt="Icon 2">
+                </div>
+                <h3 class="mt-6 text-xl font-medium  text-[#091638]">Experienced agents</h3>
+                <p class="my-4 font-normal  text-[#091638]leading-relaxed">Find an experienced agent who knows your
+                    market best</p>
+            </div>
+
+            <div class="p-8 text-center">
+                <div class="button-text mx-auto flex h-12 w-12 items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/icon (2).png') }}" alt="Icon 3">
+                </div>
+                <h3 class="mt-6 text-xl font-medium  text-[#091638]">Buy or rent homes</h3>
+                <p class="my-4 font-normal  text-[#091638] leading-relaxed">Millions of houses and apartments in your
+                    favourite cities</p>
+            </div>
+
+            <div class="p-8 text-center">
+                <div class="button-text mx-auto flex h-12 w-12 items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/icon (3).png') }}" alt="Icon 4">
+                </div>
+                <h3 class="mt-6 text-xl font-medium  text-[#091638]">List your own property</h3>
+                <p class="my-4 font-normal  text-[#091638] leading-relaxed">Sign up now and sell or rent your own
+                    properties</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- End Of Section Choose Us -->
+
+<!-- Customers Section  -->
+
+<section class="font-mulish max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
+    <div
+        class="flex flex-col items-center lg:grid lg:grid-cols-2 gap-16 py-8 lg:py-16 px-4 mx-auto max-w-screen-xl lg:px-6">
+        <!-- Text Section -->
+        <div class="bg-white w-full items-center justify-center px-4 pt-16" id="faq">
+            <h2 class="text-4xl font-[Merriweather] text-center lg:text-start">What Our Customers are
+                saying?</h2>
+            <p class="pt-6 pb-8 text-base max-w-2xl text-center lg:text-left m-auto">
+                Various versions have evolved over the years, sometimes by accident, sometimes on purpose injected
+                humour and the like.
+            </p>
+            <div class="flex flex-col-2 md:flex-col lg:flex-row justify-center lg:justify-start">
+                <div class="max-w-md bg-white grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:ml-auto">
+                    <div class="flex flex-col p-6">
+                        <dt class="order-2 mt-2 text-sm leading-6 font-semibold text-blue-900">
+                            Happy People
+                        </dt>
+                        <dd class="order-1 text-2xl font-extrabold text-blue-900">10m+</dd>
+                    </div>
+                </div>
+                <div class="max-w-md bg-white grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:ml-4">
+                    <div class="flex flex-col p-6">
+                        <dt class="order-2 mt-2 text-sm leading-6 font-semibold text-blue-900">
+                            Overall rating
+                        </dt>
+                        <dd class="order-1 text-2xl font-extrabold text-blue-900">4.88</dd>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Section -->
+        <div class="bg-white">
+            <section class="py-12 px-4 lg:px-0 max-w-3xl mx-auto">
+                <div class="flex items-center justify-center lg:justify-start mb-8">
+                    <img class="w-16 h-16 rounded-full border-4 border-gray-200 dark:border-gray-600"
+                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gouch.png"
+                        alt="profile picture">
+                    <div class="ml-4">
+                        <p class="text-lg font-semibold text-gray-900">Cameron Williamson</p>
+                        <p class="text-sm font-light text-gray-600 dark:text-gray-400">Entrepreneur</p>
+                    </div>
+                    <div class="items-end ml-32">
+                        <svg class="h-8 w-8 mb-4 text-gray-900 dark:text-gray-600 items-end" viewBox="0 0 24 27"
+                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="max-w-lg p-6">
+                    <blockquote class="text-lg font-medium text-gray-800">
+                        "Searches for multiplexes, property comparisons, and the loan estimator. Works great."
+                    </blockquote>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+<!-- End Of Customers Section  -->
+
+<!-- AI SECTION  -->
+
+<section class="bg-white flex flex-1 w-full flex-col items-center justify-center text-center px-4 py-20">
+    <h1 class="mx-auto max-w-4xl font-[Merriweather] text-5xl  tracking-normal dark:text-gray-800 sm:text-5xl">
+        Use Our
+        <span class="relative whitespace-nowrap dark:text-blue-900">
+
+            <span class="relative"> AI</span>
+        </span>
+    </h1>
+    <h2 class="mt-9 max-w-3xl text-lg sm:text-gray-400 text-white-500 dark:text-gray-800 leading-7">
+        Our artificial intelligence is designed to provide you with advanced tools to maximize your opportunities in
+        the real estate market. Utilizing sophisticated algorithms and in-depth analysis of historical data and
+        specific property characteristics, our AI employs a regression model to accurately predict future property
+        prices. This enables you to make informed decisions and optimize your investments.
+
+
+    </h2>
+    <h3 class="mt-3 text-blue-600">Would you like to test our AI and see how it can transform your approach to the
+        real estate
+        market?</h3>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-20 mt-12">
+
+        <form class="max-w-sm mx-auto md:mx-0">
+            <select
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option>Bedrooms</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+            </select>
+        </form>
+
+        <form class="max-w-sm mx-auto md:mx-0">
+            <select id="#"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option>Bathrooms</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select>
+        </form>
+
+        <form class="max-w-sm mx-auto md:mx-0 ">
+            <select id="#"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option>Floors</option>
+                <option>1</option>
+                <option>1.5</option>
+                <option>2</option>
+            </select>
+        </form>
+
+        <form class="max-w-sm mx-auto md:mx-0">
+            <select id="#"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option>Waterfront</option>
+                <option>0</option>
+                <option>1</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="price mt-11">
+        <h1 class="text-3xl text-blue-800 font-mulish font-bold mb-3 ">Price</h1>
+        <button type="price"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">7.77786
+            $</button>
+    </div>
+
+</section>
+
+<!-- END WITH AI SECTION  -->
+
+<!-- CONTACT US -->
+
+<div class="contact slide relative w-full h-full z-50">
+    <div class=" w-full h-full flex items-center justify-center">
+        <!-- Slideover Container -->
+        <div id="slideover-container" class="w-full h-full fixed inset-0 invisible">
+            <div onclick="toggleSlideover()" id="slideover-bg" class="absolute inset-0 bg-gray-900 opacity-50">
+            </div>
+            <div id="slideover"
+                class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out">
+                <!-- Close Button -->
+                <button onclick="toggleSlideover()"
+                    class="absolute top-0 right-0 m-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <!-- Contact Content -->
+                <div
+                    class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-20 h-full flex flex-col justify-center mt-12">
+                    <div class="mb-6 max-w-xl">
+                        <h2 class="text-xl sm:text-xl lg:text-2xl text-blue-900  mb-4 font-medium leading-tight">
+                            Please do not hesitate to contact us with any questions or requests for information.
+                        </h2>
+                    </div>
+                    <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-1">
+                        <!-- Contact Methods -->
+                        <div class="flex md:block items-start sm:items-center space-x-4">
+                            <div
+                                class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                <i class="fa-solid fa-phone text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                    Phone At:</h3>
+                                <p class="text-blue-900">+121 685 886602</p>
+                                <p class="text-blue-500">Monday to Friday, 9:00 AM to 6:00 PM
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex md:block items-start sm:items-center space-x-4">
+                            <div
+                                class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                <i class="fa-solid fa-envelope-open text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                    email by sending your message to:</h3>
+                                <p class="text-blue-900">manzel.21@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="flex md:block items-start sm:items-center space-x-4">
+                            <div
+                                class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                <i class="fa-brands fa-whatsapp text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">Or via
+                                    direct chat on WhatsApp at:</h3>
+                                <p class="text-blue-900">+1(514) 555-1234</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Alpine.js -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/alpine.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- END OF CONTACT US -->
+
+
+{% endblock %}

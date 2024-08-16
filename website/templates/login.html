@@ -1,0 +1,64 @@
+{% extends 'forms.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block body %}
+
+<body class="min-h-screen flex items-center justify-center relative bg-gray-50">
+    <div class="form-container p-10 md:p-16 rounded-lg bg-white shadow-md">
+        <div class="max-w-lg w-full">
+            <img src="{{ url_for('static', filename='images/LogoWhite.png') }}" alt="Logo" class="h-10 text-left mb-36">
+            <h2 class="text-2xl font-bold mb-5 text-center text-gray-400">
+                Or
+                <a href="{{ url_for('auth.sign_up') }}" class="hover:underline text-white">Sign Up</a>
+            </h2>
+            <h2 class="text-2xl font-bold mb-6 text-center text-blue-400">Log In</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                {% if category == 'success' %}
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+                    <span class="font-medium">{{ message }} - Now you can log in.</span>
+                </div>
+                {% else %}
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <span class="font-medium">{{ message }}</span>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20">
+                            <path
+                                d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                        </svg>
+                    </span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('auth.login') }}" method="post">
+                {{ form.hidden_tag() }}
+                <div class="mb-1 text-2xl">
+                    {{ form.email(class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none
+                    focus:ring focus:ring-blue-500", placeholder="Email") }}
+                </div>
+                <div class="mb-1">
+                    {{ form.password(class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg
+                    focus:outline-none focus:ring focus:ring-blue-500", placeholder="Password") }}
+                </div>
+                <div class="flex flex-col gap-3 mt-6">
+                    {{ form.submit(class="w-full bg-blue-500 text-white py-3 rounded-lg text-sm hover:bg-blue-600
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50") }}
+                    <a href="#" class="text-white text-sm hover:underline text-center">Forgot your password?</a>
+                    <a href="#" class="text-blue-500 text-sm hover:underline text-center">Log in as <span
+                            class="text-white">Admin</span></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+{% endblock %}
