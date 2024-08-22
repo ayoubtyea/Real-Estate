@@ -326,6 +326,76 @@
         </div>
     </div>
 
+    <!-- CONTACT US -->
+
+    <div class="contact slide relative w-full h-full z-50">
+        <div class=" w-full h-full flex items-center justify-center">
+            <!-- Slideover Container -->
+            <div id="slideover-container" class="w-full h-full fixed inset-0 invisible">
+                <div onclick="toggleSlideover()" id="slideover-bg" class="absolute inset-0 bg-gray-900 opacity-50">
+                </div>
+                <div id="slideover"
+                    class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out">
+                    <!-- Close Button -->
+                    <button onclick="toggleSlideover()"
+                        class="absolute top-0 right-0 m-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <!-- Contact Content -->
+                    <div
+                        class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-20 h-full flex flex-col justify-center mt-12">
+                        <div class="mb-6 max-w-xl">
+                            <h2 class="text-xl sm:text-xl lg:text-2xl text-blue-900  mb-4 font-medium leading-tight">
+                                Please do not hesitate to contact us with any questions or requests for information.
+                            </h2>
+                        </div>
+                        <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-1">
+                            <!-- Contact Methods -->
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-solid fa-phone text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                        Phone At:</h3>
+                                    <p class="text-blue-900">+121 685 886602</p>
+                                    <p class="text-blue-500">Monday to Friday, 9:00 AM to 6:00 PM
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-solid fa-envelope-open text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">By
+                                        email by sending your message to:</h3>
+                                    <p class="text-blue-900">manzel.21@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="flex md:block items-start sm:items-center space-x-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
+                                    <i class="fa-brands fa-whatsapp text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-2 mt-6">Or via
+                                        direct chat on WhatsApp at:</h3>
+                                    <p class="text-blue-900">+1(514) 555-1234</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script src="{{ url_for('static', filename='js/script.js')}}"></script>

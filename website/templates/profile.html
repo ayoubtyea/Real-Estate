@@ -203,7 +203,7 @@
                     <div id="orders-form" class="slide-out-right hidden">
                         <h1 class="text-3xl text-blue-800 font-bold mb-6">Your Orders</h1>
                         <div class="overflow-x-auto">
-                            <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                            <table class="min-w-max bg-white shadow-md rounded-lg overflow-hidden">
                                 <thead class="bg-blue-800 text-white">
                                     <tr>
                                         <th class="py-3 px-6 text-left cursor-pointer">Image</th>
@@ -212,6 +212,7 @@
                                         <th class="py-3 px-6 text-left cursor-pointer">Price</th>
                                         <th class="py-3 px-6 text-left cursor-pointer">Location</th>
                                         <th class="py-3 px-6 text-left cursor-pointer">Category</th>
+                                        <th class="py-3 px-6 text-left cursor-pointer">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
@@ -229,20 +230,21 @@
                                         <td class="py-4 px-6">{{ property.current_price }}</td>
                                         <td class="py-4 px-6">{{ property.location }}</td>
                                         <td class="py-4 px-6">{{ property.category }}</td>
+                                        <td class="py-4 px-6">
+                                            {% if request.status == 'Approved' %}
+                                            <span class="text-green-600 font-semibold">Approved</span>
+                                            {% elif request.status == 'Rejected' %}
+                                            <span class="text-red-600 font-semibold">Rejected</span>
+                                            {% else %}
+                                            <span class="text-yellow-600 font-semibold">Pending</span>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-
-
-
-
-
-
-
                 </div>
             </div>
         </section>

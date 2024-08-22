@@ -323,21 +323,37 @@ function validateForm() {
 }
 
 // manage properties smothly hidden 
-document.addEventListener("DOMContentLoaded", function () {
-    const housesLink = document.getElementById("houses-link");
-    const ordersLink = document.getElementById("orders-link");
-    const housesSection = document.getElementById("houses-section");
-    const ordersSection = document.getElementById("orders-section");
+function openModal() {
+    document.getElementById('addHouseModal').classList.remove('hidden');
+}
 
-    housesLink.addEventListener("click", function (e) {
-        e.preventDefault();
-        housesSection.classList.remove("hidden");
-        ordersSection.classList.add("hidden");
+function closeModal() {
+    document.getElementById('addHouseModal').classList.add('hidden');
+}
+
+// showing Orders form 
+function showForm(formId) {
+    const forms = document.querySelectorAll('#form-container form');
+    forms.forEach(form => {
+        form.classList.add('slide-out-right');
+        form.classList.add('hidden');
     });
 
-    ordersLink.addEventListener("click", function (e) {
-        e.preventDefault();
-        ordersSection.classList.remove("hidden");
-        housesSection.classList.add("hidden");
-    });
-});
+    const selectedForm = document.getElementById(`${formId}-form`);
+    selectedForm.classList.remove('slide-out-right');
+    selectedForm.classList.remove('hidden');
+    selectedForm.classList.add('slide-in-right');
+
+    // Special handling for orders form to show it
+    if (formId === 'orders') {
+        const ordersForm = document.getElementById('orders-form');
+        ordersForm.classList.remove('hidden');
+    } else {
+        const ordersForm = document.getElementById('orders-form');
+        ordersForm.classList.add('hidden');
+    }
+}
+
+function toggleDropdown() {
+    document.getElementById('dropdownMenu').classList.toggle('hidden');
+}

@@ -77,11 +77,17 @@ def manage_properties():
             edit_property.category = edit_form.category.data
 
             if edit_form.image_url.data:
-                image_file = edit_form.image_url.data
-                image_filename = secure_filename(image_file.filename)
-                media_dir = os.path.join(current_app.root_path, "..", "media")
-                image_file.save(os.path.join(media_dir, image_filename))
-                edit_property.image_url = image_filename
+                if (
+                    hasattr(edit_form.image_url.data, "filename")
+                    and edit_form.image_url.data.filename
+                ):
+                    image_file = edit_form.image_url.data
+                    if image_file.read(1):  # Check if file has content
+                        image_filename = secure_filename(image_file.filename)
+                        media_dir = os.path.join(current_app.root_path, "..", "media")
+                        image_file.save(os.path.join(media_dir, image_filename))
+                        edit_property.image_url = image_filename
+                    edit_form.image_url.data.seek(0)  # Reset file pointer
 
             edit_property.available = edit_form.available.data
             edit_property.for_sale = edit_form.for_sale.data
@@ -96,12 +102,30 @@ def manage_properties():
         (Property.category == category_filter) | (category_filter == "all")
     ).all()
 
+    requests = Request.query.all()
+    # Handle Approve/Reject actions for customer property requests
+    if request.method == "POST":
+        request_id = request.form.get("request_id")
+        action = request.form.get("action")
+        req = Request.query.get_or_404(request_id)
+
+        if action == "approve":
+            req.status = "Approved"
+            flash("Request Approved", "success")
+        elif action == "reject":
+            req.status = "Rejected"
+            flash("Request Rejected", "danger")
+
+        db.session.commit()
+        return redirect(url_for("admin.manage_properties"))
+
     return render_template(
         "manage_properties.html",
         form=form,
         edit_form=edit_form,
         edit_property=edit_property,
         properties=properties,
+        requests=requests,
     )
 
 
@@ -117,9 +141,34 @@ def delete_property(property_id):
         return redirect(url_for("admin.manage_properties"))
 
 
-@admin.route("/manage_requests")
+# @admin.route("/manage_requests")
+# @login_required
+# def manage_requests():
+#     if current_user.id == 1:  # Assuming admin has an ID of 1
+#         requests = Request.query.all()
+#         return render_template("manage_requests.html", requests=requests)
+
+
+@admin.route("/manage-requests", methods=["POST"])
 @login_required
 def manage_requests():
-    if current_user.id == 1:  # Assuming admin has an ID of 1
-        requests = Request.query.all()
-        return render_template("manage_requests.html", requests=requests)
+    if not current_user.is_admin:
+        return redirect(url_for("home"))
+
+    request_id = request.form.get("request_id")
+    action = request.form.get("action")
+
+    # Fetch the request from the database
+    req = Request.query.get_or_404(request_id)
+
+    # Handle actions
+    if action == "approve":
+        req.status = "Approved"
+        db.session.commit()
+        flash("Request approved successfully", "success")
+    elif action == "delete":
+        db.session.delete(req)
+        db.session.commit()
+        flash("Request deleted successfully", "danger")
+
+    return redirect(url_for("admin.manage_requests"))

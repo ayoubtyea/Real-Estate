@@ -179,15 +179,3 @@
 .flash-message {
     transition: opacity 0.3s ease;
 }
-
-// manage properties 
-.section {
-    transition: opacity 0.3s ease-in-out;
-}
-
-.hidden {
-    opacity: 0;
-    pointer-events: none;
-    height: 0;
-    overflow: hidden;
-}
