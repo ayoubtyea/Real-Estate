@@ -1,0 +1,58 @@
+
+// admin showing sidebar 
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.section.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.section.hidden {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.slide-in-right {
+    animation: slide-in-right 0.5s forwards;
+}
+
+.slide-out-right {
+    animation: slide-out-right 0.5s forwards;
+}
+
+@keyframes slide-in-right {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out-right {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}

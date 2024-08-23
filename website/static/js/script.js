@@ -331,29 +331,4 @@ function closeModal() {
     document.getElementById('addHouseModal').classList.add('hidden');
 }
 
-// showing Orders form 
-function showForm(formId) {
-    const forms = document.querySelectorAll('#form-container form');
-    forms.forEach(form => {
-        form.classList.add('slide-out-right');
-        form.classList.add('hidden');
-    });
 
-    const selectedForm = document.getElementById(`${formId}-form`);
-    selectedForm.classList.remove('slide-out-right');
-    selectedForm.classList.remove('hidden');
-    selectedForm.classList.add('slide-in-right');
-
-    // Special handling for orders form to show it
-    if (formId === 'orders') {
-        const ordersForm = document.getElementById('orders-form');
-        ordersForm.classList.remove('hidden');
-    } else {
-        const ordersForm = document.getElementById('orders-form');
-        ordersForm.classList.add('hidden');
-    }
-}
-
-function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('hidden');
-}

@@ -8,7 +8,7 @@ from flask import (
     send_from_directory,
 )
 from flask_login import login_required, current_user
-from .models import Property
+from .models import Property, Customer
 from . import db
 from datetime import datetime
 from .forms import PropertyForm
@@ -17,7 +17,7 @@ from .forms import PropertyForm
 from flask import current_app
 import os
 from website.models import Request
-
+from flask import abort
 
 admin = Blueprint("admin", __name__)
 
@@ -30,8 +30,7 @@ def get_image(filename):
 @admin.route("/manage-properties", methods=["GET", "POST"])
 @login_required
 def manage_properties():
-    # Ensure only admin (id == 1) can access
-    if current_user.id == 1:
+    if current_user.id == 1:  # Ensure only admin can access
         form = PropertyForm()
         edit_form = None
         edit_property = None
@@ -39,25 +38,27 @@ def manage_properties():
 
         # Handle adding a new property
         if form.validate_on_submit() and not edit_property_id:
-            image_filename = None
-            if form.image_url.data:
-                image_file = form.image_url.data
-                image_filename = secure_filename(image_file.filename)
-                media_dir = os.path.join(current_app.root_path, "..", "media")
-                image_file.save(os.path.join(media_dir, image_filename))
-
-            new_property = Property(
-                title=form.title.data,
-                description=form.description.data,
-                current_price=form.current_price.data,
-                location=form.location.data,
-                category=form.category.data,
-                image_url=image_filename,
-                available=form.available.data,
-                for_sale=form.for_sale.data,
-                date_added=datetime.utcnow(),
-            )
             try:
+                image_filename = None
+                if form.image_url.data:
+                    image_file = form.image_url.data
+                    image_filename = secure_filename(image_file.filename)
+                    media_dir = os.path.join(current_app.root_path, "..", "media")
+                    if not os.path.exists(media_dir):
+                        os.makedirs(media_dir)
+                    image_file.save(os.path.join(media_dir, image_filename))
+
+                new_property = Property(
+                    title=form.title.data,
+                    description=form.description.data,
+                    current_price=form.current_price.data,
+                    location=form.location.data,
+                    category=form.category.data,
+                    image_url=image_filename,
+                    available=form.available.data,
+                    for_sale=form.for_sale.data,
+                    date_added=datetime.utcnow(),
+                )
                 db.session.add(new_property)
                 db.session.commit()
                 flash("Property added successfully", "success")
@@ -65,39 +66,49 @@ def manage_properties():
             except Exception as e:
                 db.session.rollback()
                 flash(f"Error adding property: {e}", "danger")
+                # Optionally log the error for further debugging
+                print(f"Error adding property: {e}")
 
         # Handle editing an existing property
         if edit_property_id:
             edit_property = Property.query.get_or_404(edit_property_id)
             edit_form = PropertyForm(obj=edit_property)
             if edit_form.validate_on_submit():
-                edit_property.title = edit_form.title.data
-                edit_property.description = edit_form.description.data
-                edit_property.current_price = edit_form.current_price.data
-                edit_property.location = edit_form.location.data
-                edit_property.category = edit_form.category.data
+                try:
+                    edit_property.title = edit_form.title.data
+                    edit_property.description = edit_form.description.data
+                    edit_property.current_price = edit_form.current_price.data
+                    edit_property.location = edit_form.location.data
+                    edit_property.category = edit_form.category.data
 
-                if edit_form.image_url.data:
-                    if (
-                        hasattr(edit_form.image_url.data, "filename")
-                        and edit_form.image_url.data.filename
-                    ):
-                        image_file = edit_form.image_url.data
-                        if image_file.read(1):  # Check if file has content
-                            image_filename = secure_filename(image_file.filename)
-                            media_dir = os.path.join(
-                                current_app.root_path, "..", "media"
-                            )
-                            image_file.save(os.path.join(media_dir, image_filename))
-                            edit_property.image_url = image_filename
-                        edit_form.image_url.data.seek(0)  # Reset file pointer
+                    if edit_form.image_url.data:
+                        if (
+                            hasattr(edit_form.image_url.data, "filename")
+                            and edit_form.image_url.data.filename
+                        ):
+                            image_file = edit_form.image_url.data
+                            if image_file.read(1):  # Check if file has content
+                                image_filename = secure_filename(image_file.filename)
+                                media_dir = os.path.join(
+                                    current_app.root_path, "..", "media"
+                                )
+                                if not os.path.exists(media_dir):
+                                    os.makedirs(media_dir)
+                                image_file.save(os.path.join(media_dir, image_filename))
+                                edit_property.image_url = image_filename
+                            edit_form.image_url.data.seek(0)  # Reset file pointer
 
-                edit_property.available = edit_form.available.data
-                edit_property.for_sale = edit_form.for_sale.data
+                    edit_property.available = edit_form.available.data
+                    edit_property.for_sale = edit_form.for_sale.data
 
-                db.session.commit()
-                flash("Property updated successfully", "success")
-                return redirect(url_for("admin.manage_properties"))
+                    db.session.commit()
+                    flash("Property updated successfully", "success")
+                    return redirect(url_for("admin.manage_properties"))
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f"Error updating property: {e}", "danger")
+                    # Optionally log the error for further debugging
+                    print(f"Error updating property: {e}")
 
         # Query to filter properties based on `category` and `for_sale`
         category_filter = request.args.get("category", "all")
@@ -109,20 +120,28 @@ def manage_properties():
         if request.method == "POST":
             request_id = request.form.get("request_id")
             action = request.form.get("action")
-            req = Request.query.get_or_404(request_id)
+            if request_id and action:
+                req = Request.query.get_or_404(request_id)
+                try:
+                    if action == "approve":
+                        req.status = "Approved"
+                        flash("Request Approved", "success")
+                    elif action == "reject":
+                        req.status = "Rejected"
+                        flash("Request Rejected", "danger")
 
-            if action == "approve":
-                req.status = "Approved"
-                flash("Request Approved", "success")
-            elif action == "reject":
-                req.status = "Rejected"
-                flash("Request Rejected", "danger")
+                    db.session.commit()
+                    return redirect(url_for("admin.manage_properties"))
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f"Error handling request: {e}", "danger")
+                    # Optionally log the error for further debugging
+                    print(f"Error handling request: {e}")
 
-            db.session.commit()
-            return redirect(url_for("admin.manage_properties"))
-
-        # Fetch requests for display
+        # Fetch requests and customers for display
         requests = Request.query.all()
+        customers = Customer.query.all()
+        admin = Customer.query.get_or_404(current_user.id)
 
         return render_template(
             "manage_properties.html",
@@ -131,10 +150,11 @@ def manage_properties():
             edit_property=edit_property,
             properties=properties,
             requests=requests,
+            customers=customers,
+            admin=admin,
         )
     else:
-        flash("Unauthorized access!", "danger")
-        return redirect(url_for("main.index"))
+        abort(404)
 
 
 @admin.route("/delete-property/<int:property_id>", methods=["POST"])
@@ -180,3 +200,16 @@ def manage_requests():
         flash("Request deleted successfully", "danger")
 
     return redirect(url_for("admin.manage_requests"))
+
+
+@admin.route("/view-customers")
+@login_required
+def view_customers():
+    # Ensure only admin (id == 1) can access
+    if current_user.id != 1:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for("main.index"))
+
+    customers = Customer.query.all()  # Fetch all customers
+
+    return redirect(url_for("admin.manage_properties"), customers=customers)
