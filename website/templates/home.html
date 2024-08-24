@@ -101,13 +101,13 @@
     <!-- CARDS -->
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-            {% for property in properties %}
+            {% for property in properties[:9] %}
             <div class="relative bg-white border border-gray-200 shadow-lg rounded-lg">
                 <button
                     class="absolute top-2 left-2 bg-blue-800 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
                     {{ property.category }}
                 </button>
-                <a href="#">
+                <a href="{{ url_for('views.property_detail', property_id=property.id) }}" class="block">
                     <img src="/media/{{ property.image_url }}" alt="Property Image"
                         class="w-full rounded-t-lg object-cover h-48 sm:h-56 md:h-64 lg:h-72">
                 </a>
@@ -161,6 +161,7 @@
             </a>
         </div>
     </div>
+
 
 
 

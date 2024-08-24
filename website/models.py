@@ -40,8 +40,10 @@ class Property(db.Model):
     image_url = db.Column(db.String(200), nullable=True)
     available = db.Column(db.Boolean, default=True)
     for_sale = db.Column(db.Boolean, default=False)
-
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Ensure unique backref name
+    requests = db.relationship("Request", back_populates="property")
 
     def __str__(self):
         return f"<Property {self.title}>"
@@ -79,8 +81,9 @@ class Request(db.Model):
     status = db.Column(db.String(50), default="Pending")
     payment_id = db.Column(db.String(1000), nullable=True)
 
+    # Relationships
     customer = db.relationship("Customer", backref=db.backref("requests", lazy=True))
-    property = db.relationship("Property", backref=db.backref("requests", lazy=True))
+    property = db.relationship("Property", back_populates="requests")
 
     def __str__(self):
         return f"<Request {self.customer_id} - {self.property_id}>"

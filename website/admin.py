@@ -66,7 +66,6 @@ def manage_properties():
             except Exception as e:
                 db.session.rollback()
                 flash(f"Error adding property: {e}", "danger")
-                # Optionally log the error for further debugging
                 print(f"Error adding property: {e}")
 
         # Handle editing an existing property
@@ -80,6 +79,8 @@ def manage_properties():
                     edit_property.current_price = edit_form.current_price.data
                     edit_property.location = edit_form.location.data
                     edit_property.category = edit_form.category.data
+                    edit_property.available = edit_form.available.data
+                    edit_property.for_sale = edit_form.for_sale.data
 
                     if edit_form.image_url.data:
                         if (
@@ -98,16 +99,12 @@ def manage_properties():
                                 edit_property.image_url = image_filename
                             edit_form.image_url.data.seek(0)  # Reset file pointer
 
-                    edit_property.available = edit_form.available.data
-                    edit_property.for_sale = edit_form.for_sale.data
-
                     db.session.commit()
                     flash("Property updated successfully", "success")
                     return redirect(url_for("admin.manage_properties"))
                 except Exception as e:
                     db.session.rollback()
                     flash(f"Error updating property: {e}", "danger")
-                    # Optionally log the error for further debugging
                     print(f"Error updating property: {e}")
 
         # Query to filter properties based on `category` and `for_sale`
@@ -135,7 +132,6 @@ def manage_properties():
                 except Exception as e:
                     db.session.rollback()
                     flash(f"Error handling request: {e}", "danger")
-                    # Optionally log the error for further debugging
                     print(f"Error handling request: {e}")
 
         # Fetch requests and customers for display
@@ -161,12 +157,34 @@ def manage_properties():
 @login_required
 def delete_property(property_id):
     if current_user.id == 1:
+        try:
+            property = Property.query.get_or_404(property_id)
 
-        property = Property.query.get_or_404(property_id)
-        db.session.delete(property)
-        db.session.commit()
-        flash("Property deleted successfully", "success")
+            # Delete or handle requests related to the property
+            related_requests = Request.query.filter_by(property_id=property_id).all()
+
+            # Option 1: Delete all related requests
+            for req in related_requests:
+                db.session.delete(req)
+
+            # Option 2: Alternatively, if you want to keep the requests but set property_id to NULL,
+            # uncomment the lines below and make sure the `property_id` in the Request model can be nullable.
+            # for req in related_requests:
+            #     req.property_id = None
+
+            # Delete the property after handling related requests
+            db.session.delete(property)
+            db.session.commit()
+
+            flash("Property and related requests deleted successfully", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error deleting property: {e}", "danger")
+            print(f"Error deleting property: {e}")
+
         return redirect(url_for("admin.manage_properties"))
+    else:
+        abort(404)
 
 
 # @admin.route("/manage_requests")
