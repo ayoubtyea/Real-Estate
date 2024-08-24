@@ -302,3 +302,35 @@ function closeModal() {
 }
 
 
+// const form = document.getElementById('ai-form');
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById('ai-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent default form submission
+
+        const formData = new FormData(form);
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.price) {
+                    // Update the price input field
+                    document.getElementById('predicted-price').value = result.price.toFixed(2) + ' $';
+
+                    // Scroll smoothly to the AI section to avoid any jump
+                    document.getElementById('ai').scrollIntoView({ behavior: 'smooth' });
+                } else if (result.error) {
+                    console.error('Prediction error:', result.error);
+                }
+            } else {
+                console.error('Failed to fetch prediction');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+});

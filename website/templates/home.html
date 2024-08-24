@@ -294,11 +294,10 @@
 
 <!-- AI SECTION  -->
 
-<section class="bg-white flex flex-1 w-full flex-col items-center justify-center text-center px-4 py-20">
-    <h1 class="mx-auto max-w-4xl font-[Merriweather] text-5xl  tracking-normal dark:text-gray-800 sm:text-5xl">
+<section id="ai" class=" bg-white flex flex-col w-full items-center justify-center text-center px-4 py-20">
+    <h1 class="mx-auto max-w-4xl font-[Merriweather] text-5xl tracking-normal dark:text-gray-800 sm:text-5xl">
         Use Our
         <span class="relative whitespace-nowrap dark:text-blue-900">
-
             <span class="relative"> AI</span>
         </span>
     </h1>
@@ -307,67 +306,79 @@
         the real estate market. Utilizing sophisticated algorithms and in-depth analysis of historical data and
         specific property characteristics, our AI employs a regression model to accurately predict future property
         prices. This enables you to make informed decisions and optimize your investments.
-
-
     </h2>
     <h3 class="mt-3 text-blue-600">Would you like to test our AI and see how it can transform your approach to the
-        real estate
-        market?</h3>
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-20 mt-12">
+        real estate market?</h3>
 
-        <form class="max-w-sm mx-auto md:mx-0">
-            <select
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <!-- Responsive grid: 1 column by default, 2 columns on medium and larger screens -->
+    <div class="flex flex-row gap-4 md:gap-20 mt-12">
+        <form class="max-w-sm mx-auto md:mx-0 grid grid-cols-1 md:grid-cols-2 gap-4 justify-center" method="POST"
+            action="/predict" id="ai-form">
+
+            <!-- Fields section -->
+            <select name="bedrooms"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option>Bedrooms</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
             </select>
-        </form>
 
-        <form class="max-w-sm mx-auto md:mx-0">
-            <select id="#"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select name="bathrooms"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option>Bathrooms</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
             </select>
-        </form>
 
-        <form class="max-w-sm mx-auto md:mx-0 ">
-            <select id="#"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select name="floors"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option>Floors</option>
-                <option>1</option>
-                <option>1.5</option>
-                <option>2</option>
+                <option value="1">1</option>
+                <option value="1.5">1.5</option>
+                <option value="2">2</option>
             </select>
-        </form>
 
-        <form class="max-w-sm mx-auto md:mx-0">
-            <select id="#"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 px-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select name="waterfront"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option>Waterfront</option>
-                <option>0</option>
-                <option>1</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
             </select>
+
+            <!-- Submit button centered below the selects -->
+            <div class="col-span-1 md:col-span-2 flex justify-center mt-6">
+                <button type="submit"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-2.5">
+                    Predict Price
+                </button>
+            </div>
         </form>
     </div>
 
-    <div class="price mt-11">
-        <h1 class="text-3xl text-blue-800 font-mulish font-bold mb-3 ">Price</h1>
-        <button type="price"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">7.77786
-            $</button>
+    <!-- Display Predicted Price in a professional, labeled div -->
+    <div class="price mt-11 flex flex-col items-center justify-center">
+        <div class="bg-white p-4 rounded-lg">
+            <label for="predicted-price" class="block text-sm font-medium text-gray-700 mb-2">Predicted Property
+                Price:</label>
+            <div class="relative">
+                <input id="predicted-price" type="text"
+                    class="peer bg-gray-50 h-10 w-72 rounded-lg text-gray-900 placeholder-gray-400 ring-2 px-2 ring-gray-300 focus:ring-sky-600 focus:outline-none"
+                    placeholder="Predicted Property Price"
+                    value="{% if predicted_price %} {{ predicted_price | round(2) }} $ {% else %} Not Available {% endif %}"
+                    readonly>
+            </div>
+        </div>
     </div>
 
 </section>
+
 
 <!-- END WITH AI SECTION  -->
 

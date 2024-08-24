@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, current_app, jsonify, request, session
 from .models import Property
 from flask_login import login_required
 from flask import Blueprint, render_template, redirect, url_for, flash, request
@@ -22,10 +22,13 @@ from flask import request, render_template, redirect, url_for, flash
 views = Blueprint("views", __name__)
 
 
-@views.route("/")
+@views.route("/", methods=["GET", "POST"])
 def home():
     properties = Property.query.all()
-    return render_template("home.html", properties=properties)
+    predicted_price = session.pop("predicted_price", None)
+    return render_template(
+        "home.html", properties=properties, predicted_price=predicted_price
+    )
 
 
 @views.route("/who")
@@ -151,3 +154,22 @@ def my_requests():
             )
 
     return render_template("profile.html", properties=properties)
+
+
+@views.route("/predict", methods=["POST"])
+def predict():
+    try:
+        bedrooms = int(request.form.get("bedrooms"))
+        bathrooms = int(request.form.get("bathrooms"))
+        floors = float(request.form.get("floors"))
+        waterfront = int(request.form.get("waterfront"))
+
+        input_data = [[bedrooms, bathrooms, floors, waterfront]]
+        model = current_app.model
+        prediction = model.predict(input_data)[0]
+
+        session["predicted_price"] = prediction  # Store the result in the session
+        return redirect(url_for("views.home"))  # Redirect to the home route
+    except Exception as e:
+        session["predicted_price"] = "Error"  # Handle errors
+        return redirect(url_for("views.home"))  # Redirect to home on error
