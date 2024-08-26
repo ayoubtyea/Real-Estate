@@ -313,7 +313,7 @@
     <!-- Responsive grid: 1 column by default, 2 columns on medium and larger screens -->
     <div class="flex flex-row gap-4 md:gap-20 mt-12">
         <form class="max-w-sm mx-auto md:mx-0 grid grid-cols-1 md:grid-cols-2 gap-4 justify-center" method="POST"
-            action="/predict" id="ai-form">
+            action="{{ url_for('views.predict') }}#ai" id="ai-form">
 
             <!-- Fields section -->
             <select name="bedrooms"
@@ -362,7 +362,8 @@
         </form>
     </div>
 
-    <!-- Display Predicted Price in a professional, labeled div -->
+
+    {% if session['predicted_price'] %}
     <div class="price mt-11 flex flex-col items-center justify-center">
         <div class="bg-white p-4 rounded-lg">
             <label for="predicted-price" class="block text-sm font-medium text-gray-700 mb-2">Predicted Property
@@ -370,12 +371,11 @@
             <div class="relative">
                 <input id="predicted-price" type="text"
                     class="peer bg-gray-50 h-10 w-72 rounded-lg text-gray-900 placeholder-gray-400 ring-2 px-2 ring-gray-300 focus:ring-sky-600 focus:outline-none"
-                    placeholder="Predicted Property Price"
-                    value="{% if predicted_price %} {{ predicted_price | round(2) }} $ {% else %} Not Available {% endif %}"
-                    readonly>
+                    value="{{ session['predicted_price'] | round(2) }} $" readonly>
             </div>
         </div>
     </div>
+    {% endif %}
 
 </section>
 
@@ -391,7 +391,7 @@
             <div onclick="toggleSlideover()" id="slideover-bg" class="absolute inset-0 bg-gray-900 opacity-50">
             </div>
             <div id="slideover"
-                class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out">
+                class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out overflow-y-auto">
                 <!-- Close Button -->
                 <button onclick="toggleSlideover()"
                     class="absolute top-0 right-0 m-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 focus:outline-none">
@@ -435,7 +435,7 @@
                                 <p class="text-blue-900">manzel.21@gmail.com</p>
                             </div>
                         </div>
-                        <div class="flex md:block items-start sm:items-center space-x-4">
+                        <div class="flex md:block items-start sm:items-center space-x-4 mb-6">
                             <div
                                 class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
                                 <i class="fa-brands fa-whatsapp text-3xl"></i>

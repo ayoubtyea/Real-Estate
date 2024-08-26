@@ -334,3 +334,47 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+// filter properies 
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Get the select dropdown and all property cards
+    const filterSelect = document.getElementById('category-filter');
+    const propertyCards = document.querySelectorAll('.property-card');
+
+    console.log("Filter Select element:", filterSelect); // Debugging
+    console.log("Property Cards:", propertyCards); // Debugging
+
+    // Function to filter properties based on the selected value
+    function filterProperties() {
+        const selectedCategory = filterSelect.value;
+
+        console.log("Selected category:", selectedCategory); // Debugging
+
+        // Loop through all the property cards
+        propertyCards.forEach(function (card) {
+            // Get the data-category value of each property card
+            const propertyCategory = card.getAttribute('data-category');
+
+            console.log("Property Category:", propertyCategory); // Debugging
+
+            // If 'all' is selected, show all properties
+            if (selectedCategory === 'all') {
+                card.style.display = 'block'; // Show all cards
+            } else {
+                // Show only cards that match the selected category
+                if (propertyCategory === selectedCategory) {
+                    card.style.display = 'block'; // Show matching cards
+                } else {
+                    card.style.display = 'none'; // Hide non-matching cards
+                }
+            }
+        });
+    }
+
+    // Listen for change events on the dropdown
+    filterSelect.addEventListener('change', filterProperties);
+
+    // Initial filter when the page loads
+    filterProperties();
+});

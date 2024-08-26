@@ -25,7 +25,7 @@ views = Blueprint("views", __name__)
 @views.route("/", methods=["GET", "POST"])
 def home():
     properties = Property.query.all()
-    predicted_price = session.pop("predicted_price", None)
+    predicted_price = session.get("predicted_price")
     return render_template(
         "home.html", properties=properties, predicted_price=predicted_price
     )
@@ -159,17 +159,23 @@ def my_requests():
 @views.route("/predict", methods=["POST"])
 def predict():
     try:
+        # Get the form inputs
         bedrooms = int(request.form.get("bedrooms"))
         bathrooms = int(request.form.get("bathrooms"))
         floors = float(request.form.get("floors"))
         waterfront = int(request.form.get("waterfront"))
 
+        # Prepare data for prediction
         input_data = [[bedrooms, bathrooms, floors, waterfront]]
+
+        # Load the model and make prediction
         model = current_app.model
         prediction = model.predict(input_data)[0]
 
-        session["predicted_price"] = prediction  # Store the result in the session
-        return redirect(url_for("views.home"))  # Redirect to the home route
+        # Store the predicted price in session
+        session["predicted_price"] = prediction
+        return redirect(url_for("views.home") + "#ai")
+
     except Exception as e:
-        session["predicted_price"] = "Error"  # Handle errors
-        return redirect(url_for("views.home"))  # Redirect to home on error
+        session["predicted_price"] = "Error"
+        return redirect(url_for("views.home") + "#ai")

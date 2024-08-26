@@ -193,6 +193,7 @@
                         <option value="rent">Rent</option>
                     </select>
                 </div>
+
             </div>
         </section>
 
@@ -244,18 +245,6 @@
                 </div>
                 {% endfor %}
             </div>
-
-            <div class="text-center mt-8">
-                <a href="#"
-                    class="inline-flex items-center px-6 py-3 text-base font-semibold text-white bg-blue-800 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300">
-                    Show next
-                    <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5h12m0 0L9 1m4 4L9 9" />
-                    </svg>
-                </a>
-            </div>
         </section>
 
 
@@ -285,6 +274,8 @@
 
     <!-- CONTACT US -->
 
+    <!-- CONTACT US -->
+
     <div class="contact slide relative w-full h-full z-50">
         <div class=" w-full h-full flex items-center justify-center">
             <!-- Slideover Container -->
@@ -292,7 +283,7 @@
                 <div onclick="toggleSlideover()" id="slideover-bg" class="absolute inset-0 bg-gray-900 opacity-50">
                 </div>
                 <div id="slideover"
-                    class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out">
+                    class="absolute right-0 top-0 h-full bg-white w-96 transform translate-x-full transition-transform duration-300 ease-out overflow-y-auto">
                     <!-- Close Button -->
                     <button onclick="toggleSlideover()"
                         class="absolute top-0 right-0 m-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 focus:outline-none">
@@ -336,7 +327,7 @@
                                     <p class="text-blue-900">manzel.21@gmail.com</p>
                                 </div>
                             </div>
-                            <div class="flex md:block items-start sm:items-center space-x-4">
+                            <div class="flex md:block items-start sm:items-center space-x-4 mb-6">
                                 <div
                                     class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-400 text-blue-900">
                                     <i class="fa-brands fa-whatsapp text-3xl"></i>
@@ -353,7 +344,34 @@
             </div>
         </div>
     </div>
+    <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const filterSelect = document.getElementById('category-filter');
+                const propertyCards = document.querySelectorAll('.property-card');
+
+                function filterProperties() {
+                    const selectedCategory = filterSelect.value;
+
+                    propertyCards.forEach(function (card) {
+                        const propertyCategory = card.getAttribute('data-category');
+
+                        if (selectedCategory === 'all' || propertyCategory === selectedCategory) {
+                            card.style.display = 'block'; // Show card
+                        } else {
+                            card.style.display = 'none'; // Hide card
+                        }
+                    });
+                }
+
+                filterSelect.addEventListener('change', filterProperties);
+
+                // Initial filter when the page loads
+                filterProperties();
+            });
+    </script>
+
     <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+    <script src="../static/js/script.js"></script>
 </body>
 
 </html>
